@@ -1,0 +1,29 @@
+name: "Deploy to GitHub Relases"
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: setup Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: '2.7.5'
+
+    - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
+    - name: Deploy to GitHub Releases
+      env:
+        TOKEN: ${{ steps.generate_token.outputs.token }}
+        SHA: ${{ github.sha }}
+      run: |
+        bundle exec ruby deploy.rb
