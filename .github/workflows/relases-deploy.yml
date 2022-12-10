@@ -27,4 +27,5 @@ jobs:
           TOKEN: ${{ steps.generate_token.outputs.token }}
           SHA: ${{ github.sha }}
         run: |
+          bundle install
           bundle exec ruby deploy.rb
